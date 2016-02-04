@@ -37,11 +37,24 @@ exports.readListOfUrls = function(callback){
 };
 
 exports.isUrlInList = function(target, callback){
-  exports.readListOfUrls()
+  exports.readListOfUrls(function(sites){
+    for(var i=0;i<sites.length;i++){
+      
+      if(sites[i]===target){
+        callback(true);
+      }
+    }
+    callback(false);
+  })
 };
 
 exports.addUrlToList = function(url, callback){
-  fs.createWriteStream(path, options);
+  exports.isUrlInList(url, function(bool){
+    if(bool === false){
+      fs.appendFile(exports.paths.list,url);
+      callback();
+    }
+  });
 };
 
 exports.isUrlArchived = function(){
